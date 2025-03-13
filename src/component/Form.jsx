@@ -8,7 +8,9 @@ function Form() {
     });
 
     const [errors, setErrors] = useState({
-        email: ''
+        name: '',
+        email: '',
+        message: ''
     });
 
     const handleChange = (e) => {
@@ -37,6 +39,18 @@ function Form() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // Check for empty fields
+        const newErrors = {};
+        if (!formData.name) newErrors.name = 'Name is required.';
+        if (!formData.email) newErrors.email = 'Email is required.';
+        if (!formData.message) newErrors.message = 'Message is required.';
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
+
         // Handle form submission logic here
         console.log(formData);
     };
@@ -53,6 +67,7 @@ function Form() {
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
+                {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
             </div>
             <div className="mb-4">
                 <label htmlFor="email" className="block text-gray-700 font-bold mb-2">Email:</label>
@@ -75,9 +90,9 @@ function Form() {
                     onChange={handleChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
+                {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message}</p>}
             </div>
             <button 
-            onSubmit={handleSubmit}
             type="submit" className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300">
                 Submit
             </button>
