@@ -1,6 +1,6 @@
 import React from 'react';
 import NavBar from './NavBar';
-import Form from '../component/Form';
+import Form from './Form';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import { FaHtml5, FaCss3Alt, FaReact, FaLinkedin, FaGithub } from "react-icons/fa";
 import { SiTailwindcss } from "react-icons/si";
