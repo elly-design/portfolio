@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import emailjs from 'emailjs-com';
 
 function Form() {
     const [formData, setFormData] = useState({
@@ -51,8 +52,24 @@ function Form() {
             return;
         }
 
-        // Handle form submission logic here
-        console.log(formData);
+        // Add recipient email manually to the template data
+        const emailParams = {
+            name: formData.name,
+            email: formData.email,
+            message: formData.message,
+            to_email: 'ellyman2021@gmail.com' // Add the recipient email here
+        };
+
+        // Send form data using EmailJS
+        emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', emailParams, 'YOUR_USER_ID')
+            .then((response) => {
+                console.log('SUCCESS!', response.status, response.text);
+                alert('Message sent successfully!');
+                setFormData({ name: '', email: '', message: '' });
+            }, (error) => {
+                console.log('FAILED...', error);
+                alert('Failed to send message. Please try again later.');
+            });
     };
 
     return (
@@ -93,7 +110,9 @@ function Form() {
                 {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message}</p>}
             </div>
             <button 
-            type="submit" className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300">
+                type="submit" 
+                className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300"
+            >
                 Submit
             </button>
         </form>
