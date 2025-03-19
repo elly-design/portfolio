@@ -73,26 +73,28 @@ export default function Home() {
         <div className="flex flex-col items-center md:flex-row md:justify-between w-full">
           
           {/* Image Section */}
-          <div className="mb-6 md:mb-0 flex justify-center w-full relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-white opacity-75 rounded-lg"></div>
-            <img 
-              src="/images/myself.jpeg" 
-              alt="Profile" 
-              className="object-cover rounded-lg shadow-md relative z-10"
-            />
-          </div>
+<div className="flex justify-center w-full relative">
+  {/* Image Wrapper for Border & Shadow */}
+  <div className="relative z-10 p-2 rounded-xl shadow-lg">
+    <img 
+      src="/images/myself.jpeg" 
+      alt="Profile" 
+      className="w-full max-w-xs md:max-w-md lg:max-w-lg h-auto rounded-xl shadow-md object-contain"
+    />
+  </div>
+</div>
 
           {/* Text Section */}
           <div className="md:w-3/5 text-left md:text-justify">
             <p className="text-lg text-gray-700 leading-relaxed mb-4">
-              I am <span className="font-semibold text-gray-900">Eliot Manacia Owiti</span>, a dedicated <span className="font-semibold text-gray-900">Marine Engineer</span>, <span className="font-semibold text-gray-900">Software Developer</span>, and <span className="font-semibold text-gray-900">Front-End Developer</span>. My passion lies in developing ultrasonic underwater microcontroller detectors and designing smart automation systems that enhance marine technology.
+              I am <span className="font-semibold text-gray-900">Eliot Manacia Owiti</span>, a <span className="font-semibold text-gray-900">Marine Engineer</span> and <span className="font-semibold text-gray-900">Software Developer</span>. I specialize in developing ultrasonic underwater microcontroller detectors and designing smart automation systems for marine technology.
             </p>
 
             <p className="text-lg text-gray-700 leading-relaxed mb-4">
-              As a Front-End Developer, I specialize in creating visually appealing and user-friendly web interfaces. I have experience working with modern web technologies such as HTML, CSS, JavaScript, and React. My focus is on building responsive and accessible web applications that provide an excellent user experience.
+              As a Front-End Developer, I create visually appealing and user-friendly web interfaces using HTML, CSS, JavaScript, and React. My focus is on building responsive and accessible web applications.
             </p>
             <p className="text-lg text-gray-700 leading-relaxed">
-              I am committed to continuous learning and staying ahead of advancements in marine engineering, software development, and front-end development. My dedication to innovation drives me to explore new technologies and implement them in practical real-world applications.
+              I am dedicated to continuous learning and innovation, exploring new technologies to implement in practical real-world applications.
             </p>
           </div>
         </div>
