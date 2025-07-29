@@ -22,7 +22,7 @@ export default function Home() {
 
   return (
     <>
-      <NavBar title="Eliot" links={navLinks} />
+      <NavBar title="" links={navLinks} />
 
       <div
         id="home"
@@ -158,7 +158,7 @@ export default function Home() {
 
             {/* Working Hours */}
             <p className="text-lg text-gray-800 mb-4 flex items-center">
-              <i className="fas fa-clock text-blue-500 mr-3"></i> Mon - Fri: 9:00 AM - 6:00 PM
+              <i className="fas fa-clock text-blue-500 mr-3"></i> Mon - Fri: 8:00 AM - 5:00 PM
             </p>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import emailjs from 'emailjs-com';
+import { supabase } from '../config/supabase';
 
 function Form() {
     const [formData, setFormData] = useState({
@@ -14,6 +14,9 @@ function Form() {
         message: ''
     });
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState({ success: false, message: '' });
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -21,10 +24,18 @@ function Form() {
             [name]: value
         });
 
+        // Clear any existing errors when user types
+        if (errors[name]) {
+            setErrors({
+                ...errors,
+                [name]: ''
+            });
+        }
+
         // Validate email
         if (name === 'email') {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(value)) {
+            if (value && !emailRegex.test(value)) {
                 setErrors({
                     ...errors,
                     email: 'Please enter a valid email address.'
@@ -38,42 +49,62 @@ function Form() {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsSubmitting(true);
+        setSubmitStatus({ success: false, message: '' });
 
         // Check for empty fields
         const newErrors = {};
-        if (!formData.name) newErrors.name = 'Name is required.';
-        if (!formData.email) newErrors.email = 'Email is required.';
-        if (!formData.message) newErrors.message = 'Message is required.';
+        if (!formData.name.trim()) newErrors.name = 'Name is required.';
+        if (!formData.email.trim()) newErrors.email = 'Email is required.';
+        if (!formData.message.trim()) newErrors.message = 'Message is required.';
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
+            setIsSubmitting(false);
             return;
         }
 
-        // Add recipient email manually to the template data
-        const emailParams = {
-            name: formData.name,
-            email: formData.email,
-            message: formData.message,
-            to_email: 'ellyman2021@gmail.com' // Add the recipient email here
-        };
+        try {
+            // Insert form data into Supabase
+            const { data, error } = await supabase
+                .from('contact_submissions')
+                .insert([
+                    {
+                        name: formData.name.trim(),
+                        email: formData.email.trim(),
+                        message: formData.message.trim()
+                    },
+                ]);
 
-        // Send form data using EmailJS
-        emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', emailParams, 'YOUR_USER_ID')
-            .then((response) => {
-                console.log('SUCCESS!', response.status, response.text);
-                alert('Message sent successfully!');
-                setFormData({ name: '', email: '', message: '' });
-            }, (error) => {
-                console.log('FAILED...', error);
-                alert('Failed to send message. Please try again later.');
+            if (error) throw error;
+
+            // Clear form on successful submission
+            setFormData({ name: '', email: '', message: '' });
+            setSubmitStatus({
+                success: true,
+                message: 'Thank you for your message! I will get back to you soon.'
             });
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            setSubmitStatus({
+                success: false,
+                message: 'Failed to send message. Please try again later.'
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
         <form onSubmit={handleSubmit} className="mt-6 mb-6 max-w-lg mx-auto p-8 bg-white rounded-lg shadow-md">
+            {submitStatus.message && (
+                <div className={`mb-6 p-4 rounded-lg ${submitStatus.success ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                    {submitStatus.message}
+                </div>
+            )}
+            
             <div className="mb-4">
                 <label htmlFor="name" className="block text-gray-700 font-bold mb-2">Name:</label>
                 <input
@@ -82,10 +113,12 @@ function Form() {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    disabled={isSubmitting}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-70"
                 />
                 {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
             </div>
+            
             <div className="mb-4">
                 <label htmlFor="email" className="block text-gray-700 font-bold mb-2">Email:</label>
                 <input
@@ -94,26 +127,44 @@ function Form() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    disabled={isSubmitting}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-70"
                 />
                 {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
             </div>
-            <div className="mb-4">
+            <div className="mb-6">
                 <label htmlFor="message" className="block text-gray-700 font-bold mb-2">Message:</label>
                 <textarea
                     id="message"
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+                    disabled={isSubmitting}
+                    rows="4"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-70"
+                ></textarea>
                 {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message}</p>}
             </div>
-            <button 
-                type="submit" 
-                className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300"
+            <button
+                type="submit"
+                disabled={isSubmitting}
+                className={`w-full bg-blue-500 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors ${
+                    isSubmitting 
+                        ? 'bg-blue-400 cursor-not-allowed' 
+                        : 'hover:bg-blue-600 hover:shadow-md'
+                }`}
             >
-                Submit
+                {isSubmitting ? (
+                    <div className="flex items-center justify-center">
+                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Sending...
+                    </div>
+                ) : (
+                    'Send Message'
+                )}
             </button>
         </form>
     );
