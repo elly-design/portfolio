@@ -84,7 +84,7 @@ function Form() {
             setFormData({ name: '', email: '', message: '' });
             setSubmitStatus({
                 success: true,
-                message: 'Thank you for your message! I will get back to you soon.'
+                message: 'Message Sent Successfully!'
             });
         } catch (error) {
             console.error('Error submitting form:', error);

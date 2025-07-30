@@ -69,7 +69,7 @@ export default function NavBar(props) {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6">
-            {links && links.slice(0, 4).map((link, index) => (
+            {links && links.slice(0, 5).map((link, index) => (
               <a
                 key={index}
                 href={link.path}
@@ -85,7 +85,7 @@ export default function NavBar(props) {
         {isMobile && isOpen && (
           <div className="md:hidden mt-4">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-violet-600 rounded-lg">
-              {links && links.slice(0, 4).map((link, index) => (
+              {links && links.slice(0, 5).map((link, index) => (
                 <a
                   key={index}
                   href={link.path}
