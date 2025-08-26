@@ -246,8 +246,7 @@ const EducationExperience = () => {
               </div>
               <div className="mt-6">
                 <h3 className="text-2xl font-bold text-gray-800">Professional Certification</h3>
-                <p className="text-gray-600 mt-2">Issued by Institution Name</p>
-                <p className="text-sm text-gray-500 mt-2">Click on the certificate to view in full size</p>
+               
               </div>
             </div>
           </div>
