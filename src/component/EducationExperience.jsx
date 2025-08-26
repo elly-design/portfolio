@@ -46,30 +46,7 @@ const EducationExperience = () => {
       icon: <FaGraduationCap className="text-blue-500" />,
       type: 'education'
     },
-    {
-      id: 4,
-      year: '2016-2019',
-      title: 'BARDING’ HIGH SCHOOL',
-      description: [],
-      icon: <FaGraduationCap className="text-blue-500" />,
-      type: 'education'
-    },
-    {
-      id: 5,
-      year: '2011-2018',
-      title: 'MUMBE JUNIOR ACADEMY',
-      description: [],
-      icon: <FaGraduationCap className="text-blue-500" />,
-      type: 'education'
-    },
-    {
-      id: 6,
-      year: '2010-2011',
-      title: 'ST. IRENE PRIMARY SCHOOL',
-      description: [],
-      icon: <FaGraduationCap className="text-blue-500" />,
-      type: 'education'
-    }
+     
   ];
 
   const filteredData = activeTab === 'all' 
@@ -220,7 +197,7 @@ const EducationExperience = () => {
                 </div>
                 <div className="relative w-full h-[70vh] flex items-center justify-center bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
                   <img 
-                    src="/images/certificate.jpeg" 
+                    src="/images/skies.jpeg" 
                     alt="Professional Certification" 
                     className="absolute inset-0 w-full h-full object-contain p-4 transition-opacity duration-500"
                     style={{
@@ -255,7 +232,7 @@ const EducationExperience = () => {
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                   <a 
-                    href="/images/certificate.jpeg" 
+                    href="/images/skies.jpeg" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="inline-flex items-center px-4 py-2 bg-white text-blue-600 rounded-full text-sm font-medium hover:bg-blue-50 transition-colors"
