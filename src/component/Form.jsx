@@ -67,24 +67,31 @@ function Form() {
         }
 
         try {
-            // Insert form data into Supabase
-            const { data, error } = await supabase
-                .from('contact_submissions')
-                .insert([
-                    {
-                        name: formData.name.trim(),
-                        email: formData.email.trim(),
-                        message: formData.message.trim()
-                    },
-                ]);
+            // Send form data to our email server
+            const response = await fetch('http://localhost:3001/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: formData.name.trim(),
+                    email: formData.email.trim(),
+                    message: formData.message.trim()
+                })
+            });
 
-            if (error) throw error;
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.message || 'Failed to submit form');
+            }
+            
+            const responseData = await response.json();
 
             // Clear form on successful submission
             setFormData({ name: '', email: '', message: '' });
             setSubmitStatus({
                 success: true,
-                message: 'Message Sent Successfully!'
+                message: 'Message sent successfully! You will hear back soon.'
             });
         } catch (error) {
             console.error('Error submitting form:', error);
